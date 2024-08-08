@@ -13,12 +13,12 @@
 // bring in panic handler
 use panic_rtt_target as _;
 
-#[rtic::app(device = esp32c3)]
+#[rtic::app(device = esp32c3, dispatchers=[FROM_CPU_INTR0, FROM_CPU_INTR1])]
 mod app {
     use rtt_target::{rprintln, rtt_init_print};
 
     // to bring in interrupt vector initialization
-    use esp32c3_hal::{
+    use esp_hal::{
         self as _,
         clock::ClockControl,
         gpio::{Gpio9, Input, PullUp},
@@ -46,7 +46,7 @@ mod app {
 
         let io = IO::new(peripherals.GPIO, peripherals.IO_MUX);
         let mut button = io.pins.gpio9.into_pull_up_input();
-        button.listen(esp32c3_hal::gpio::Event::FallingEdge);
+        button.listen(esp_hal::gpio::Event::FallingEdge);
 
         #[allow(unreachable_code)]
         (Shared {}, Local { button })
