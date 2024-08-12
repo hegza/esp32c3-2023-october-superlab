@@ -64,6 +64,7 @@ crc = "3.0.1"
 
 # application dependency
 shared = { path = "../shared" }
+rtic-monotonics = "2.0.2"
 # rtic-monotonics = { git = "https://github.com/onsdagens/rtic", branch = "monotonic", features = [
 #     "esp32c3-systimer",
 # ] }
