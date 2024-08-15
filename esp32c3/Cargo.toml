@@ -11,50 +11,17 @@ critical-section = "1.1.2"
 cfg-if = "1.0.0"
 
 # target dependency
-#esp32c3-hal = { git = "https://github.com/perlindgren/esp-hal", branch = 'uart', features = [
-#    "direct-boot",
-#    "interrupt-preemption",
-#    "direct-vectoring",
-#] }
-
-#esp-backtrace = { version = "0.11.0", features = [
-#    "esp32c3",
-#    "panic-handler",
-#    "exception-handler",
-#    "println",
-#] }
-
-# target dependency
-#esp32c3-hal = "0.15.1"
-# esp-hal = { version = "0.19.0", features = ["esp32c3", "direct-vectoring"] }
-# esp-hal = { version = "0.19.0", features = ["esp32c3", "direct-vectoring", "interrupt-preemption"] }
-#
-#
-#
-# TODO: Find smartled version that depends on the version of esp_hal that I use.
-#           OR update esp_hal version to 0.19.0
-#
-#
-#esp-hal-smartled = { git = "https://github.com/perlindgren/esp-hal", branch = 'uart', features=["esp32c3"] }
 esp-hal-smartled = { version = "0.9.0", features=["esp32c3"] }
 esp-hal = { version = "0.16.1", features = ["esp32c3", "direct-vectoring", "interrupt-preemption"] }
-# esp-backtrace = { version = "0.11.0", features = [
-#     "esp32c3",
-#     "panic-handler",
-#     "exception-handler",
-#     "println",
-# ] }
-#esp32c3 = { version = "0.17.0", features = ["critical-section"] }
 esp32c3 = { version = "0.22.0", features = ["critical-section"] }
 # tracing and panic handling
 rtt-target = "0.5.0"
 panic-rtt-target = "0.1.2"
 
 # rtic framework
-rtic = { git = 'https://github.com/rtic-rs/rtic', features = [
+rtic = { git = "https://github.com/rtic-rs/rtic", features = [
     "riscv-esp32c3-backend",
 ] }
-
 rtic-sync = { git = 'https://github.com/rtic-rs/rtic' }
 
 # external libraries used
@@ -64,10 +31,6 @@ crc = "3.0.1"
 
 # application dependency
 shared = { path = "../shared" }
-rtic-monotonics = "2.0.2"
-# rtic-monotonics = { git = "https://github.com/onsdagens/rtic", branch = "monotonic", features = [
-#     "esp32c3-systimer",
-# ] }
 smart-leds = "0.3.0"
 
 [profile.release]
@@ -75,8 +38,3 @@ incremental = false
 codegen-units = 1   # better optimizations
 debug = true        # symbols are nice and they don't increase the size on Flash
 opt-level = 3
-#portable-atomic = { version = "1", default-features = false, features = ["require-cas"]}
-# use critical section instead of atomics
-#[patch.crates-io]
-#rtt-target = { git = 'https://github.com/perlindgren/rtt-target', branch = 'cell' }
-#panic-rtt-target = { git = 'https://github.com/perlindgren/rtt-target', branch = 'cell' }
