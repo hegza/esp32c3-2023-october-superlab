@@ -18,7 +18,7 @@ mod app {
     use rtt_target::{rprintln, rtt_init_print};
 
     // to bring in interrupt vector initialization
-    use esp32c3_hal as _;
+    use esp_hal as _;
 
     #[shared]
     struct Shared {}

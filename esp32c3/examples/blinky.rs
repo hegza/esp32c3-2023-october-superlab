@@ -10,7 +10,7 @@
 #![no_std]
 #![no_main]
 
-use esp32c3_hal::{clock::ClockControl, gpio::IO, peripherals::Peripherals, prelude::*, Delay};
+use esp_hal::{clock::ClockControl, gpio::IO, peripherals::Peripherals, prelude::*, delay::Delay};
 
 use rtt_target::{rprintln, rtt_init_print};
 

@@ -8,12 +8,17 @@ Repository for `esp32c3-rtic-tau` demonstration and assignments.
 
 ## Software requirements
 
-- We flash these examples using `cargo embed`, cargo-subcommand. Obtain the tools by running the following:
-  - `cargo install probe-rs --features cli`
-- Setup udev rules for probe-rs: <https://probe.rs/docs/getting-started/probe-setup/>
-- Refresh udev rules
-  - `sudo udevadm control --reload-rules && sudo udevadm trigger`
-  - WSL2 only: if the above fails on WSL2, run `sudo service udev restart` then try again
+Software components needed for running the superlab examples (**Already satisfied on course VMs**):
+
+- `PuTTY` for monitoring the serial on the examples that use it
+- `probe-rs-tools` for flashing and debugging the target
+- `nightly-2023-11-14` toolchain
+
+We flash these examples using `cargo embed`, cargo-subcommand. Obtain the tools by running the following (**Already done on the course VM**):
+
+1. `cargo binstall probe-rs-tools`
+2. Setup udev rules for probe-rs: <https://probe.rs/docs/getting-started/probe-setup/>
+3. Refresh udev rules `sudo udevadm control --reload-rules && sudo udevadm trigger`
 
 ## Running the examples
 
@@ -29,16 +34,27 @@ ESP32-C3 programs can be run on the target device as follows.
 You cannot put serial wires into a USB port and expect it to work. Therefore we must use a small FTDI2232HL board to
 fill in the gaps.
 
-We setup the board based on the FTDI2232H/HL's datasheet:
-<https://ftdichip.com/wp-content/uploads/2020/07/DS_FT2232H.pdf>
+The FTDI's pins should be configured the following way:
 
-For example, for a setup where IO pin 0 is allocated for UART TX and IO pin 1 is allocated for UART RX, the connections
-between the FTDI and the ESP32-C3 are as follows:
+### Internal (Loopback) connections
 
-| ESP32-C3 | FTDI |
-| - | - |
-| GND | GND |
-| IO0 | AD1 |
-| IO1 | AD0 |
+| **Start** | **End** | **Description** |
+| :-:       | :-:     | :-:             |
+| CN3-1     | CN3-3   | Connect the USB power to the VCC of the FTDI |
+| CN2-3     | CN2-11  | Connect the VCC of the FTDI to the VCC IO of the FTDI |
 
-Be mindful of the fact that the TX from the microcontroller will be the RX for the host and vice versa.
+### External connections to the ESP32-C3
+
+| FT2232H Mini  | ESP32-C3 |
+| :-:           | :-:      |
+| CN2-7 (TX)    | IO20/RX  |
+| CN2-10 (RX)   | IO21/TX  |
+
+### Useful links
+
+- [https://ftdichip.com/wp-content/uploads/2020/07/DS_FT2232H_Mini_Module.pdf](https://ftdichip.com/wp-content/uploads/2020/07/DS_FT2232H_Mini_Module.pdf)
+- [https://ftdichip.com/wp-content/uploads/2020/07/DS_FT2232H.pdf](https://ftdichip.com/wp-content/uploads/2020/07/DS_FT2232H.pdf)
+
+## Connecting to the FTDI
+
+In order to connect to the FTDI and interact with the ESP32-C3 via serial, we will use PuTTY. For the course VM, just run `sudo putty` and select the `FTDI Serial` profile (**For those using the couse VM**). Click open and now, if you have connected the FTDI to the VM, you should see the data the ESP32-C3 sends over the serial!

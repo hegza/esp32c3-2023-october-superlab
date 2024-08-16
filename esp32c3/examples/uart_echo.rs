@@ -29,16 +29,15 @@ use panic_rtt_target as _;
 #[rtic::app(device = esp32c3)]
 mod app {
     use core::fmt::Write;
-    use esp32c3_hal::{
-        clock::ClockControl,
-        peripherals::{Peripherals, TIMG0, UART0},
-        prelude::*,
-        timer::{Timer, Timer0, TimerGroup},
+    use esp_hal::{
+        clock::ClockControl, 
+        peripherals::{Peripherals, TIMG0, UART0}, 
+        prelude::*, 
+        timer::{Timer, Timer0, TimerGroup}, 
         uart::{
             config::{Config, DataBits, Parity, StopBits},
             TxRxPins,
-        },
-        Uart, IO,
+        }, Uart, IO
     };
     use nb::block;
     use rtt_target::{rprint, rprintln, rtt_init_print};
@@ -59,13 +58,12 @@ mod app {
         rprintln!("uart_echo");
 
         let peripherals = Peripherals::take();
-        let mut system = peripherals.SYSTEM.split();
+        let system = peripherals.SYSTEM.split();
         let clocks = ClockControl::max(system.clock_control).freeze();
 
         let timer_group0 = TimerGroup::new(
             peripherals.TIMG0,
             &clocks,
-            &mut system.peripheral_clock_control,
         );
         let mut timer0 = timer_group0.timer0;
 
@@ -78,16 +76,15 @@ mod app {
 
         let io = IO::new(peripherals.GPIO, peripherals.IO_MUX);
         let pins = TxRxPins::new_tx_rx(
-            io.pins.gpio0.into_push_pull_output(),
-            io.pins.gpio1.into_floating_input(),
+            io.pins.gpio21.into_push_pull_output(),
+            io.pins.gpio20.into_floating_input(),
         );
-
+        
         let mut uart0 = Uart::new_with_config(
             peripherals.UART0,
             config,
             Some(pins),
             &clocks,
-            &mut system.peripheral_clock_control,
         );
 
         // This is stupid!
@@ -100,7 +97,7 @@ mod app {
         (Shared { uart0 }, Local { timer0 })
     }
 
-    #[idle(local = [timer0], shared = [uart0])]
+    #[idle(local=[timer0], shared = [uart0])]
     fn idle(mut cx: idle::Context) -> ! {
         loop {
             cx.shared.uart0.lock(|uart0| {
@@ -110,7 +107,7 @@ mod app {
         }
     }
 
-    #[task(binds = UART0, priority=1, shared=[uart0])]
+    #[task(binds=UART0, shared=[uart0])]
     fn uart0(mut cx: uart0::Context) {
         rprint!("Interrupt Received: ");
         cx.shared.uart0.lock(|uart0| {
