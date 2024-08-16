@@ -38,17 +38,17 @@ The FTDI's pins should be configured the following way:
 
 ### Internal (Loopback) connections
 
-|**Start**|**End**|**Description**|
-|---------|-------|---------------|
-|CN3-1|CN3-3|Connect the USB power to the VCC of the FTDI|
-|CN2-3|CN2-11|Connect the VCC of the FTDI to the VCC IO of the FTDI|
+| **Start** | **End** | **Description** |
+| :-:       | :-:     | :-:             |
+| CN3-1     | CN3-3   | Connect the USB power to the VCC of the FTDI |
+| CN2-3     | CN2-11  | Connect the VCC of the FTDI to the VCC IO of the FTDI |
 
 ### External connections to the ESP32-C3
 
-|FT2232H Mini|ESP32-C3|
-|------------|--------|
-|CN2-7 (TX)|IO20/RX|
-|CN2-10 (RX)|IO21/TX|
+| FT2232H Mini  | ESP32-C3 |
+| :-:           | :-:      |
+| CN2-7 (TX)    | IO20/RX  |
+| CN2-10 (RX)   | IO21/TX  |
 
 ### Useful links
 
