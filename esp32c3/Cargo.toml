@@ -31,7 +31,7 @@ crc = "3.0.1"
 
 # application dependency
 shared = { path = "../shared" }
-smart-leds = "0.3.0"
+smart-leds = "0.4.0"
 
 [profile.release]
 incremental = false

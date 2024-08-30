@@ -11,9 +11,8 @@
 #![no_std]
 #![no_main]
 
-use esp32c3_hal::{clock::ClockControl, peripherals, prelude::*, rmt::Rmt, Delay, IO};
-//use esp_backtrace as _;
-use esp_hal_smartled::{smartLedAdapter, SmartLedsAdapter};
+use esp_hal::{clock::ClockControl, peripherals, prelude::*, rmt::Rmt, Delay, IO};
+use esp_hal_smartled::{smartLedBuffer, SmartLedsAdapter};
 use panic_rtt_target as _;
 use rtt_target::{rprintln, rtt_init_print};
 use smart_leds::{
@@ -27,7 +26,7 @@ fn main() -> ! {
     //generate rtt symbol for panic impl
     rtt_init_print!();
     let peripherals = peripherals::Peripherals::take();
-    let mut system = peripherals.SYSTEM.split();
+    let system = peripherals.SYSTEM.split();
     let clocks = ClockControl::max(system.clock_control).freeze();
 
     let io = IO::new(peripherals.GPIO, peripherals.IO_MUX);
@@ -36,14 +35,15 @@ fn main() -> ! {
     let rmt = Rmt::new(
         peripherals.RMT,
         80u32.MHz(),
-        &mut system.peripheral_clock_control,
-        &clocks,
+        &clocks
     )
     .unwrap();
 
     // We use one of the RMT channels to instantiate a `SmartLedsAdapter` which can
     // be used directly with all `smart_led` implementations
-    let mut led = <smartLedAdapter!(0, 1)>::new(rmt.channel0, io.pins.gpio2);
+    let rmt_buffer = smartLedBuffer!(1);
+    let mut led = SmartLedsAdapter::new(rmt.channel0, io.pins.gpio2, rmt_buffer, &clocks);
+    // let mut led = <smartLedAdapter!(0, 1)>::new(rmt.channel0, io.pins.gpio2);
 
     // Initialize the Delay peripheral, and use it to toggle the LED state in a
     // loop.
