@@ -43,7 +43,6 @@ fn main() -> ! {
     // be used directly with all `smart_led` implementations
     let rmt_buffer = smartLedBuffer!(1);
     let mut led = SmartLedsAdapter::new(rmt.channel0, io.pins.gpio2, rmt_buffer, &clocks);
-    // let mut led = <smartLedAdapter!(0, 1)>::new(rmt.channel0, io.pins.gpio2);
 
     // Initialize the Delay peripheral, and use it to toggle the LED state in a
     // loop.
