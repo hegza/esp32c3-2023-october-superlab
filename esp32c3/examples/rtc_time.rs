@@ -3,7 +3,7 @@
 #![no_std]
 #![no_main]
 
-use esp32c3_hal::{clock::ClockControl, peripherals::Peripherals, prelude::*, Delay, Rtc};
+use esp_hal::{clock::ClockControl, peripherals::Peripherals, prelude::*, Delay, Rtc};
 use panic_rtt_target as _;
 
 use rtt_target::{rprintln, rtt_init_print};
@@ -14,7 +14,7 @@ fn main() -> ! {
     let system = peripherals.SYSTEM.split();
     let clocks = ClockControl::boot_defaults(system.clock_control).freeze();
 
-    let rtc = Rtc::new(peripherals.RTC_CNTL);
+    let rtc = Rtc::new(peripherals.LPWR);
     let mut delay = Delay::new(&clocks);
 
     rtt_init_print!();
