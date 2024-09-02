@@ -22,6 +22,11 @@ panic-rtt-target = "0.1.2"
 rtic = { git = "https://github.com/rtic-rs/rtic", features = [
     "riscv-esp32c3-backend",
 ] }
+# This should be temporary. As soon as the pull request is closed, we should use the monotonics
+# version from the RTIC upstream.
+rtic-monotonics = { git = "https://github.com/onsdagens/rtic", branch = "monotonic-2024", features = [
+    "esp32c3-systimer",
+] }
 rtic-sync = { git = 'https://github.com/rtic-rs/rtic' }
 
 # external libraries used

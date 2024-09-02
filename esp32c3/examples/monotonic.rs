@@ -2,16 +2,13 @@
 
 #![no_main]
 #![no_std]
-#![feature(type_alias_impl_trait)]
 
 use panic_rtt_target as _;
 #[rtic::app(device = esp32c3, dispatchers = [])]
 mod app {
-    use esp32c3_hal as _;
-    use rtic_monotonics::{
-        self,
-        esp32c3_systimer::{ExtU64, Systimer},
-    };
+    use esp_hal as _;
+    use rtic_monotonics::esp32c3::prelude::*;
+    esp32c3_systimer_monotonic!(Mono);
     use rtt_target::{rprintln, rtt_init_print};
 
     #[shared]
@@ -25,8 +22,9 @@ mod app {
         rtt_init_print!();
         rprintln!("init");
 
-        let systimer_token = rtic_monotonics::create_systimer_token!();
-        Systimer::start(cx.core.SYSTIMER, systimer_token);
+        let timer = cx.device.SYSTIMER;
+
+        Mono::start(timer);
 
         foo::spawn().unwrap();
         bar::spawn().unwrap();
@@ -38,21 +36,21 @@ mod app {
     #[task]
     async fn foo(_cx: foo::Context) {
         rprintln!("hello from foo");
-        Systimer::delay(2.secs()).await;
+        Mono::delay(2_u64.secs()).await;
         rprintln!("bye from foo");
     }
 
     #[task]
     async fn bar(_cx: bar::Context) {
         rprintln!("hello from bar");
-        Systimer::delay(3.secs()).await;
+        Mono::delay(3_u64.secs()).await;
         rprintln!("bye from bar");
     }
 
     #[task]
     async fn baz(_cx: baz::Context) {
         rprintln!("hello from baz");
-        Systimer::delay(4.secs()).await;
+        Mono::delay(4_u64.secs()).await;
         rprintln!("bye from baz");
     }
 }
