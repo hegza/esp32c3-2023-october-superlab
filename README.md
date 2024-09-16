@@ -14,9 +14,9 @@ Software components needed for running the superlab examples (**Already satisfie
 - `probe-rs-tools` for flashing and debugging the target
 - `nightly-2023-11-14` toolchain
 
-We flash these examples using `cargo embed`, cargo-subcommand. Obtain the tools by running the following (**Already done on the course VM**):
+We flash these examples using `cargo embed`, cargo-subcommand. Obtain the tools by running the following commands according to advice at [probe-rs](https://probe.rs/) site (**Already done on the course VM**):
 
-1. `cargo binstall probe-rs-tools`
+1. `curl --proto '=https' --tlsv1.2 -LsSf https://github.com/probe-rs/probe-rs/releases/latest/download/probe-rs-tools-installer.sh | sh`
 2. Setup udev rules for probe-rs: <https://probe.rs/docs/getting-started/probe-setup/>
 3. Refresh udev rules `sudo udevadm control --reload-rules && sudo udevadm trigger`
 
