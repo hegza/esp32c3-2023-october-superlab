@@ -10,7 +10,7 @@
 #![no_std]
 #![no_main]
 
-use esp_hal::{clock::ClockControl, gpio::IO, peripherals::Peripherals, prelude::*, delay::Delay};
+use esp_hal::{clock::ClockControl, delay::Delay, gpio::IO, peripherals::Peripherals, prelude::*};
 
 use rtt_target::{rprintln, rtt_init_print};
 

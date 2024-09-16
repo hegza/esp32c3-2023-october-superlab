@@ -32,12 +32,7 @@ fn main() -> ! {
     let io = IO::new(peripherals.GPIO, peripherals.IO_MUX);
 
     // Configure RMT peripheral globally
-    let rmt = Rmt::new(
-        peripherals.RMT,
-        80u32.MHz(),
-        &clocks
-    )
-    .unwrap();
+    let rmt = Rmt::new(peripherals.RMT, 80u32.MHz(), &clocks).unwrap();
 
     // We use one of the RMT channels to instantiate a `SmartLedsAdapter` which can
     // be used directly with all `smart_led` implementations
