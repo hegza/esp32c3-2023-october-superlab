@@ -12,7 +12,7 @@ Software components needed for running the superlab examples (**Already satisfie
 
 - `PuTTY` for monitoring the serial on the examples that use it
 - `probe-rs-tools` for flashing and debugging the target
-- `nightly-2023-11-14` toolchain
+- A Rust toolchain from the `stable` channel (<https://rustup.rs/>).
 
 We flash these examples using `cargo embed`, cargo-subcommand. Obtain the tools by running the following commands according to advice at [probe-rs](https://probe.rs/) site (**Already done on the course VM**):
 
