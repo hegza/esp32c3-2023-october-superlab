@@ -21,7 +21,6 @@
 
 #![no_main]
 #![no_std]
-#![feature(type_alias_impl_trait)]
 
 // bring in panic handler
 use panic_rtt_target as _;
@@ -30,14 +29,15 @@ use panic_rtt_target as _;
 mod app {
     use core::fmt::Write;
     use esp_hal::{
-        clock::ClockControl, 
-        peripherals::{Peripherals, TIMG0, UART0}, 
-        prelude::*, 
-        timer::{Timer, Timer0, TimerGroup}, 
+        clock::ClockControl,
+        peripherals::{Peripherals, TIMG0, UART0},
+        prelude::*,
+        timer::{Timer, Timer0, TimerGroup},
         uart::{
             config::{Config, DataBits, Parity, StopBits},
             TxRxPins,
-        }, Uart, IO
+        },
+        Uart, IO,
     };
     use nb::block;
     use rtt_target::{rprint, rprintln, rtt_init_print};
@@ -61,10 +61,7 @@ mod app {
         let system = peripherals.SYSTEM.split();
         let clocks = ClockControl::max(system.clock_control).freeze();
 
-        let timer_group0 = TimerGroup::new(
-            peripherals.TIMG0,
-            &clocks,
-        );
+        let timer_group0 = TimerGroup::new(peripherals.TIMG0, &clocks);
         let mut timer0 = timer_group0.timer0;
 
         let config = Config {
@@ -79,13 +76,8 @@ mod app {
             io.pins.gpio21.into_push_pull_output(),
             io.pins.gpio20.into_floating_input(),
         );
-        
-        let mut uart0 = Uart::new_with_config(
-            peripherals.UART0,
-            config,
-            Some(pins),
-            &clocks,
-        );
+
+        let mut uart0 = Uart::new_with_config(peripherals.UART0, config, Some(pins), &clocks);
 
         // This is stupid!
         // TODO, can we have interrupts after timeout even if threshold > 1?

@@ -1,3 +1,8 @@
+// Remove these lint-disablers when you're ready to port this file
+#![allow(dead_code)]
+#![allow(unused_variables)]
+#![allow(unused_mut)]
+
 #[derive(PartialEq)]
 pub struct ShiftRegister;
 

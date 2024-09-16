@@ -8,19 +8,14 @@
 //!
 //! minicom -b 115200 -D /dev/ttyACM1
 //!
-//! or
-//!
-//! moserial -p moserial_acm1.cfg
-//!
 //! Echoes incoming data
 //!
-//! This assumes we have usb<->serial adepter appearing as /dev/ACM1
+//! This assumes we have usb<->serial adapter appearing as /dev/ACM1
+//!
 //! - Target TX = GPIO0, connect to RX on adapter
 //! - Target RX = GPIO1, connect to TX on adapter
-//!
 #![no_std]
 #![no_main]
-#![feature(type_alias_impl_trait)]
 
 use panic_rtt_target as _;
 
@@ -29,7 +24,7 @@ use panic_rtt_target as _;
 
 #[rtic::app(device = esp32c3, dispatchers = [FROM_CPU_INTR0, FROM_CPU_INTR1])]
 mod app {
-    use esp32c3_hal::{
+    use esp_hal::{
         clock::ClockControl,
         peripherals::{Peripherals, TIMG0, UART0},
         prelude::*,
@@ -63,14 +58,10 @@ mod app {
         let (sender, receiver) = make_channel!(u8, CAPACITY);
 
         let peripherals = Peripherals::take();
-        let mut system = peripherals.SYSTEM.split();
+        let system = peripherals.SYSTEM.split();
         let clocks = ClockControl::max(system.clock_control).freeze();
 
-        let timer_group0 = TimerGroup::new(
-            peripherals.TIMG0,
-            &clocks,
-            &mut system.peripheral_clock_control,
-        );
+        let timer_group0 = TimerGroup::new(peripherals.TIMG0, &clocks);
         let mut timer0 = timer_group0.timer0;
 
         let config = Config {
@@ -86,13 +77,7 @@ mod app {
             io.pins.gpio1.into_floating_input(),
         );
 
-        let mut uart0 = Uart::new_with_config(
-            peripherals.UART0,
-            config,
-            Some(pins),
-            &clocks,
-            &mut system.peripheral_clock_control,
-        );
+        let mut uart0 = Uart::new_with_config(peripherals.UART0, config, Some(pins), &clocks);
 
         // This is stupid!
         // TODO, use at commands with break character
@@ -143,7 +128,6 @@ mod app {
             }
         }
         rprintln!("");
-        rx.reset_rx_fifo_full_interrupt()
     }
 
     #[task(priority = 1, local = [ tx ])]

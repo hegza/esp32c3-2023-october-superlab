@@ -8,7 +8,6 @@
 
 #![no_main]
 #![no_std]
-#![feature(type_alias_impl_trait)]
 
 // bring in panic handler
 use panic_rtt_target as _;
